@@ -55,7 +55,7 @@ resource "aws_security_group" "example" {
   ingress {
     from_port   = 443
     to_port     = 443
- protocol    = "tcp"
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -67,16 +67,11 @@ resource "aws_network_interface" "example" {
   subnet_id   = aws_subnet.example.id
 }
 
-# Create an Elastic IP
-#resource "aws_eip" "example" {
-#  instance = aws_instance.example.id
-#}
-
 # Create an EC2 instance
 resource "aws_instance" "example" {
   ami           = "ami-0c55b159cbfafe1f0" # Ubuntu 20.04 LTS AMI ID, replace with your desired AMI
   instance_type = "t2.micro"             # Change the instance type if needed
-  key_name      = "TestAWS"        # Replace with your key pair name
+  key_name      = "TestAWS"              # Replace with your key pair name
 
   network_interface {
     network_interface_id = aws_network_interface.example.id
@@ -94,3 +89,4 @@ resource "aws_instance" "example" {
   tags = {
     Name = "ExampleEC2Instance2"
   }
+}
