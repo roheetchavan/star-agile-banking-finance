@@ -1,0 +1,2 @@
+[servers]
+Testserver ansible_host=18.117.107.10
