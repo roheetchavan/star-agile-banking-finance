@@ -1,20 +1,36 @@
+---
 - name: Configure Docker on EC2 Instances
   hosts: all
-  become: true
-  connection: ssh
+  become: yes
   tasks:
     - name: Updating apt
-      command: sudo apt-get update
+      apt:
+        update_cache: yes
+      tags:
+        - update-repo
 
     - name: Install Docker
-      command: sudo apt-get install -y docker.io
+      apt:
+        name: docker-ce
+        state: present
+      tags:
+        - install-docker
 
     - name: Start Docker Service
-      command: sudo systemctl start docker
+      systemd:
+        name: docker
+        state: started
+      tags:
+        - start-docker
 
     - name: Pull Docker Image
       command: docker pull utkarshapatil123/banking:1
+      tags:
+        - pull-docker-image
 
     - name: Deploy Docker Container
       command: docker run -itd -p 8081:8081 utkarshapatil123/banking:1
+      tags:
+        - deploy-docker-container
+
 
