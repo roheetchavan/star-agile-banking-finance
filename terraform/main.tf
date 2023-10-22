@@ -54,6 +54,17 @@ resource "aws_security_group" "allow_traffic" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  egress {
+    description = "Allow all outbond traffic"
+
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
+
+    # allow all traffic
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   tags = {
     Name = "allow_traffic"
   }
