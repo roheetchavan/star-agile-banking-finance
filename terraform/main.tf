@@ -60,8 +60,8 @@ resource "aws_security_group" "allow_traffic" {
 }
 
 variable "ami_id" {
-  description = "this is ubuntu ami id"
-  default     = "ami-0c55b159cbfafe1f0"
+  description = "ubuntu 22.04 ami id"
+  default     = "ami-024e6efaf93d85776"
 }
 
 resource "aws_instance" "my_ec2" {
