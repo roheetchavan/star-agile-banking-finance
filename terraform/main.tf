@@ -46,8 +46,8 @@ resource "aws_security_group" "allow_traffic" {
 
     # we should allow incoming and outoging
     # TCP packets
-    from_port   = 8081
-    to_port     = 8081
+    from_port   = 0
+    to_port     = 65535
     protocol    = "tcp"
 
     # allow all traffic
