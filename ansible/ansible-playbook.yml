@@ -1,36 +1,59 @@
 ---
-- name: Configure Docker on EC2 Instances
-  hosts: all
-  become: yes
-  tasks:
-    - name: Updating apt
-      apt:
-        update_cache: yes
-      tags:
-        - update-repo
+- hosts: all
+  become: true
+  vars:
+    container_name: "my-banking-container"
+    container_image: "utkarshapatil123/banking:1"
+    container_port: 8081
 
-    - name: Install Docker
+  tasks:
+    - name: Install aptitude
+      apt:
+        name: aptitude
+        state: latest
+        update_cache: true
+
+    - name: Install required system packages
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+        state: latest
+        update_cache: true
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu jammy stable
+        state: present
+
+    - name: Update apt and install docker-ce
       apt:
         name: docker-ce
-        state: present
-      tags:
-        - install-docker
+        state: latest
+        update_cache: true
 
-    - name: Start Docker Service
-      systemd:
+    - name: Install Docker Module for Python
+      pip:
         name: docker
+
+    - name: Pull the Docker image from Docker Hub
+      community.docker.docker_image:
+        name: "{{ container_image }}"
+        source: pull
+
+    - name: Create the Docker container
+      community.docker.docker_container:
+        name: "{{ container_name }}"
+        image: "{{ container_image }}"
+        command: "docker run -itd -p {{ container_port }}:{{ container_port }} {{ container_image }}"
         state: started
-      tags:
-        - start-docker
-
-    - name: Pull Docker Image
-      command: docker pull utkarshapatil123/banking:1
-      tags:
-        - pull-docker-image
-
-    - name: Deploy Docker Container
-      command: docker run -itd -p 8081:8081 utkarshapatil123/banking:1
-      tags:
-        - deploy-docker-container
-
-
