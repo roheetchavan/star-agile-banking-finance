@@ -57,9 +57,5 @@
         name: "{{ container_image }}"
         source: pull
 
-    - name: Create the Docker container
-      community.docker.docker_container:
-        name: "{{ container_name }}"
-        image: "{{ container_image }}"
-        command: "docker run -itd -p {{ container_port }}:{{ container_port }} {{ container_image }}"
-        state: started
+    - name: Run the Docker container
+      command: "docker run -itd -p {{ container_port }}:{{ container_port }} {{ container_image }}"
