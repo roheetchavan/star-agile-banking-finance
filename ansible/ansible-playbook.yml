@@ -42,6 +42,12 @@
         state: latest
         update_cache: true
 
+    - name: Install OpenJDK 11
+      apt:
+        name: openjdk-11-jdk
+        state: latest
+        update_cache: true
+
     - name: Install Docker Module for Python
       pip:
         name: docker
